@@ -1,0 +1,81 @@
+---
+title: "data insights from 2023"
+format: html
+---
+
+```{r}
+#| echo: false
+
+library(eltoolkit)
+library(tidyverse)
+library(here)
+
+#here::i_am("teamdata/scripts/researchbazaar2023")
+```
+
+
+
+```{r}
+session <- rac_csv(here("data/feedback.csv")) |>
+    mutate(rating = NULL,start = NULL,
+           saved_at = NULL,
+           id = NULL,
+           speakers = NULL,
+           email = str_remove(email, "@cs.wisc.edu"),
+           email = str_remove(email, "@storm-gps.us"),
+           email = str_remove(email, "@gmail.com"),
+           email = str_remove(email, "@wisc.edu"),
+           email = str_remove(email, "@sonicfoundry.com"))
+
+post_event <- rac_csv(here("data/post-events.csv")) |> 
+    select(starts_with("how"),
+           starts_with("what"),
+           starts_with("if"),
+           starts_with("affiliation"),
+           gender_identity,
+           race_and_ethnicty,
+           do_you_identify_as_transgender) |> 
+    rename(overall = how_satisfied_were_you_with_the_event_overall, 
+           registration = how_satisfied_were_you_with_the_registration_process, 
+           location = how_satisfied_were_you_with_the_choice_of_location_and_venue, 
+           panels_and_topics = how_satisfied_were_you_with_the_quality_of_the_topics_and_panels, 
+           networking = how_satisfied_were_you_with_the_opportunities_for_networking_at_the_event, 
+           engagement = how_satisfied_were_you_with_the_attendees_engagement_in_your_sessions, 
+           staff = how_satisfied_were_you_with_the_staffs_assistance_before_during_and_after_the_event, 
+           coc = how_satisfied_were_you_with_the_code_of_conduct, 
+           safety = how_satisfied_were_you_with_the_atmosphere_of_safety_belonging_and_inclusion, 
+           takeaways = what_for_you_is_the_most_valuable_takeaway_from_this_event, 
+           next_year_improvement = what_changes_would_you_like_to_see_to_the_event_for_next_year_what_could_be_improved,
+           next_year_format = what_format_do_you_most_prefer_for_next_years_research_bazaar, 
+           next_year_time = what_time_do_you_most_prefer_for_next_years_research_bazaar, 
+           role = what_were_your_role_s_at_the_event, 
+           additional = if_you_would_like_to_elaborate_on_any_of_your_answers_above_you_may_do_so_here, 
+           gender = gender_identity, 
+           race = race_and_ethnicty,
+           transgender = do_you_identify_as_transgender) |> 
+    mutate(engagement = NULL,
+           how_satisfied_were_you_with_the_row_8 = NULL,
+           role = NULL)
+
+
+presenters <-  rac_csv(here("data/presenters.csv")) |>
+    select(starts_with("during"),
+           starts_with("did"), 
+           starts_with("what")) |> 
+    mutate(session = during_which_session_did_you_present, 
+           supported_before = did_you_feel_supported_before_presenting,
+           supported_during = did_you_feel_supported_while_presenting, 
+           could_improve = what_is_something_that_you_think_could_be_improved_in_the_future_for_research_bazaar_presenters, 
+           work_well = whats_one_thing_that_went_well_or_that_you_really_liked_about_presenting_at_the_research_bazaar, 
+           during_which_session_did_you_present = NULL, 
+           did_you_feel_supported_before_presenting = NULL, 
+           did_you_feel_supported_while_presenting = NULL, 
+           what_is_something_that_you_think_could_be_improved_in_the_future_for_research_bazaar_presenters = NULL, 
+           whats_one_thing_that_went_well_or_that_you_really_liked_about_presenting_at_the_research_bazaar = NULL)
+
+
+```
+
+
+
+
