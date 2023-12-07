@@ -2,7 +2,7 @@ library(tidyverse)
 library(tidytext)
 
 
-feedback <- session_feedback_uwresearchbazaar2023_2023_11_14_xlsx_responses |>
+session <- session_feedback_uwresearchbazaar2023_2023_11_14_xlsx_responses |>
     mutate(rating = NULL,
            start = NULL,
            `saved at` = NULL,
@@ -19,7 +19,7 @@ presenters <- Copy_of_2023_Research_Bazaar_Presenter_Survey_Responses_Form_Respo
            `What is something that you think could be improved in the future for Research Bazaar presenters?`,
            `What's one thing that went well or that you really liked about presenting at the Research Bazaar?`)
 
-post_events <- post_events |> select(starts_with("how satisfied"),
+post_event <- post_events |> select(starts_with("how satisfied"),
                                      starts_with("what"),
                                      starts_with("if"),
                                      starts_with("Affiliation"),
